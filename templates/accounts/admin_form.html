@@ -1,0 +1,9 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>Create Admin (Superuser only)</h2>
+<form method="post" class="card form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn">Create Admin</button>
+</form>
+{% endblock %}

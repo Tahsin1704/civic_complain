@@ -1,0 +1,22 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>Citizens</h2>
+<table class="table">
+  <thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for c in citizens %}
+      <tr>
+        <td>{{ c.email }}</td>
+        <td>{{ c.first_name }} {{ c.last_name }}</td>
+        <td>{% if c.is_active %}Active{% else %}Inactive{% endif %}</td>
+        <td>
+          <a class="btn btn-warning" href="{% url 'citizen_deactivate' c.id %}">Deactivate</a>
+          <a class="btn btn-danger" href="{% url 'citizen_delete' c.id %}">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No citizens yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

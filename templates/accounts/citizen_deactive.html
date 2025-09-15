@@ -1,0 +1,10 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>Deactivate Citizen: {{ user.email }}</h2>
+<form method="post" class="card form">
+  {% csrf_token %}
+  <label for="reason">Reason (optional):</label>
+  <textarea name="reason" rows="3"></textarea>
+  <button type="submit" class="btn btn-warning">Confirm Deactivate</button>
+</form>
+{% endblock %}

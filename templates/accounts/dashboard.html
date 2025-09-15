@@ -1,0 +1,34 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+  <h2>Dashboard</h2>
+  <p>Logged in as <strong>{{ user.email }}</strong> ({{ user.role }})</p>
+
+  {% if user.role == 'ADMIN' %}
+    <ul>
+      <li><a href="{% url 'worker_list' %}">Manage Workers</a></li>
+      <li><a href="{% url 'citizen_list' %}">Moderate Citizens</a></li>
+    </ul>
+  {% endif %}
+
+  {% if user.is_superuser %}
+    <p><a href="{% url 'admin_create' %}">Create Admin</a></p>
+  {% endif %}
+
+  {# Example of a loop displaying items; ensure it's closed #}
+  {% if items %}
+    <h3>Your Items</h3>
+    <ul>
+      {% for i in items %}
+        {% comment %}
+          If you only want tags 1–10, you can use:
+            {% if i.tag in valid_tags %}
+        {% endcomment %}
+        
+        <li>{{ i.name }} (tag {{ i.tag }})</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No items to show.</p>
+  {% endif %}
+{% endblock %}
