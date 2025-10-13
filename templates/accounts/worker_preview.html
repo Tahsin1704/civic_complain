@@ -1,0 +1,68 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Worker Preview</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Left: Photo -->
+                <div class="col-md-4 text-center">
+                    {% if worker.worker_profile.photo %}
+                        <img src="{{ worker.worker_profile.photo.url }}" class="rounded-circle shadow" style="width:180px; height:180px; object-fit:cover;">
+                    {% else %}
+                        <img src="{% static 'images/default-user.png' %}" class="rounded-circle shadow" style="width:180px; height:180px; object-fit:cover;">
+                    {% endif %}
+                </div>
+
+                <!-- Right: Details -->
+                <div class="col-md-8">
+                    <p><strong>Name:</strong> {{ worker.first_name }} {{ worker.last_name }}</p>
+                    <p><strong>Email:</strong> {{ worker.email }}</p>
+                    <p><strong>Phone:</strong> {{ worker.worker_profile.phone }}</p>
+                    <p><strong>Skills:</strong> {{ worker.worker_profile.skills }}</p>
+                    <p><strong>Address:</strong> {{ worker.worker_profile.address }}</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Action buttons -->
+            <a href="{% url 'worker_list' %}" class="btn btn-secondary mb-3">Back to Worker List</a>
+            <a href="{% url 'worker_update' worker.id %}" class="btn btn-warning mb-3">Update Worker</a>
+            <button id="showDeleteFormBtn" class="btn btn-danger mb-3">Delete Worker</button>
+
+            <!-- Hidden reason form -->
+            <form id="deleteForm" method="post" style="display:none;">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="reason" class="form-label"><strong>Reason for deletion:</strong></label>
+                    <textarea name="reason" id="reason" class="form-control" rows="4" placeholder="Enter reason..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <button type="button" id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const deleteBtn = document.getElementById('showDeleteFormBtn');
+    const deleteForm = document.getElementById('deleteForm');
+    const cancelBtn = document.getElementById('cancelDeleteBtn');
+
+    deleteBtn.addEventListener('click', () => {
+        deleteForm.style.display = 'block';
+        deleteBtn.style.display = 'none'; // Hide the initial delete button
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        deleteForm.style.display = 'none';
+        deleteBtn.style.display = 'inline-block'; // Show the initial delete button again
+    });
+</script>
+{% endblock %}

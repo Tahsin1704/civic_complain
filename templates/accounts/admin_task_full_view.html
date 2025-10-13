@@ -1,0 +1,36 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Task Full View: {{ task.task_code }}</h2>
+    <p><strong>Title:</strong> {{ task.title }}</p>
+    <p><strong>Category:</strong> {{ task.category }}</p>
+    <p><strong>Location:</strong> {{ task.location }}</p>
+    <p><strong>Status:</strong> {{ task.status }}</p>
+    <p><strong>Priority:</strong> {{ task.priority|title }}</p>
+    <p><strong>Assigned To:</strong>
+        {% if task.assigned_to %}
+            {{ task.assigned_to.first_name }} {{ task.assigned_to.last_name }}
+        {% else %}
+            <em>Not assigned</em>
+        {% endif %}
+    </p>
+    <p><strong>Citizen Name:</strong> {{ task.citizen_name }}</p>
+    <p><strong>Created At:</strong> {{ task.created_at }}</p>
+    <p><strong>Progress:</strong> {{ task.progress|default:"-" }}</p>
+    <p><strong>Work Description:</strong> {{ task.work_description|default:"-" }}</p>
+    <p><strong>Materials Used:</strong> {{ task.materials_used|default:"-" }}</p>
+    <p><strong>Additional Notes:</strong> {{ task.additional_notes|default:"-" }}</p>
+
+    {% if task.before_photo %}
+        <p><strong>Before Photo:</strong></p>
+        <img src="{{ task.before_photo.url }}" style="max-width:300px; border-radius:8px;">
+    {% endif %}
+    {% if task.after_photo %}
+        <p><strong>After Photo:</strong></p>
+        <img src="{{ task.after_photo.url }}" style="max-width:300px; border-radius:8px;">
+    {% endif %}
+
+    <a href="{% url 'admin_task_preview' task.id %}" class="btn btn-secondary mt-3">Back to Preview</a>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

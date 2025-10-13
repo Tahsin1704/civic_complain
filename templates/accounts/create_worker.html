@@ -1,0 +1,13 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+
+<h2>Create Worker</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Create Worker</button>
+</form>
+
+<a href="{% url 'worker_list' %}" class="btn btn-secondary mt-3">← Back to Worker List</a>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "accounts/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Task Details: {{ task.title }}</h2>
+
+    <ul class="list-group mt-3">
+        <!-- Always show these -->
+        <li class="list-group-item"><strong>Description:</strong> {{ task.description }}</li>
+        <li class="list-group-item"><strong>Category:</strong> {{ task.category }}</li>
+        <li class="list-group-item"><strong>Status:</strong> {{ task.status|title }}</li>
+        <li class="list-group-item"><strong>Priority:</strong> {{ task.priority|title }}</li>
+        <li class="list-group-item"><strong>Location:</strong> {{ task.location }}</li>
+        {% if task.task_photo %}
+            <li class="list-group-item">
+                <strong>Task Photo:</strong><br>
+                <img src="{{ task.task_photo.url }}" alt="Task Photo" style="max-width:300px;">
+            </li>
+        {% endif %}
+        <li class="list-group-item"><strong>Assigned To:</strong>
+            {% if task.assigned_to %}
+                {{ task.assigned_to.email}}
+            {% else %}
+                -
+            {% endif %}
+        </li>
+
+        <!-- Show latest progress if in_progress -->
+        {% if task.status == 'in_progress' %}
+            <li class="list-group-item"><strong>Progress:</strong> {{ task.progress }}</li>
+        {% endif %}
+
+        <!-- Show detailed info if completed -->
+        {% if task.status == 'completed' %}
+            {% if task.work_description %}
+                <li class="list-group-item"><strong>Work Description:</strong> {{ task.work_description }}</li>
+            {% endif %}
+            {% if task.materials_used %}
+                <li class="list-group-item"><strong>Materials Used:</strong> {{ task.materials_used }}</li>
+            {% endif %}
+            {% if task.additional_notes %}
+                <li class="list-group-item"><strong>Additional Notes:</strong> {{ task.additional_notes }}</li>
+            {% endif %}
+            {% if task.after_photo %}
+                <li class="list-group-item">
+                    <strong>After Photo:</strong><br>
+                    <img src="{{ task.after_photo.url }}" alt="After Photo" style="max-width:300px;">
+                </li>
+            {% endif %}
+        {% endif %}
+    </ul>
+
+    <a href="{% url 'citizen_dashboard' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+{% if task.status == 'completed' %}
+<hr>
+
+{% endif %}
+
+{% endblock %}

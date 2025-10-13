@@ -1,0 +1,19 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Task Preview: {{ task.task_code }}</h2>
+    <p><strong>Title:</strong> {{ task.title }}</p>
+    <p><strong>Status:</strong> {{ task.status }}</p>
+    <p><strong>Assigned To:</strong>
+        {% if task.assigned_to %}
+            {{ task.assigned_to.first_name }} {{ task.assigned_to.last_name }}
+        {% else %}
+            <em>Not assigned</em>
+        {% endif %}
+    </p>
+
+    <!-- Full Details button -->
+    <a href="{% url 'admin_task_full_view' task.id %}" class="btn btn-info mt-2">View Full Details</a>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mt-2">Back to Dashboard</a>
+</div>
+{% endblock %}

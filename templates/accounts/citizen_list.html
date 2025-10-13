@@ -2,15 +2,30 @@
 {% block content %}
 <h2>Citizens</h2>
 <table class="table">
-  <thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Actions</th></tr></thead>
+  <form method="get" action="{% url 'citizen_search_admin' %}" class="d-flex mb-3" style="max-width: 400px;">
+  <input type="text" name="q" class="form-control me-2" placeholder="Search by email..." required>
+  <button class="btn btn-outline-primary" type="submit">Search</button>
+</form>
+
+  <thead><tr><th>Email</th><th>Name</th><th>Photo</th><th>Address</th><th>Status</th></tr></thead>
   <tbody>
     {% for c in citizens %}
       <tr>
         <td>{{ c.email }}</td>
         <td>{{ c.first_name }} {{ c.last_name }}</td>
-        <td>{% if c.is_active %}Active{% else %}Inactive{% endif %}</td>
+
+         <td>
+          {% if c.photo %}
+            <img src="{{ c.photo.url }}" alt="Profile Photo" width="60" height="60" class="rounded-circle border">
+          {% else %}
+            <span class="text-muted">No photo</span>
+          {% endif %}
+        </td>
+
+  <td>{{ c.address|default:"N/A" }}</td>
+
         <td>
-          <a class="btn btn-warning" href="{% url 'citizen_deactivate' c.id %}">Deactivate</a>
+
           <a class="btn btn-danger" href="{% url 'citizen_delete' c.id %}">Delete</a>
         </td>
       </tr>

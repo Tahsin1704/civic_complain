@@ -1,0 +1,64 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<h2>Task Preview</h2>
+<p><strong>Title:</strong>
+    {{ task.title }}
+    {% if task.is_reopened %}
+        <span class="text-danger">(Reopened)</span>
+    {% endif %}
+</p>
+
+<p><strong>Category:</strong> {{ task.category }}</p>
+
+<p><strong>Location:</strong> {{ task.location }}</p>
+<p><strong>Priority:</strong> {{ task.priority }}</p>
+<p><strong>Status:</strong> {{ task.status }}</p>
+<p><strong>Assigned To:</strong>
+    {% if task.assigned_to %}
+        {{ task.assigned_to.first_name }} {{ task.assigned_to.last_name }} ({{ task.assigned_to.email }})
+    {% else %}
+        <em>Not assigned</em>
+    {% endif %}
+</p>
+<p><strong>Estimated Time:</strong> {{ task.estimated_time }}</p>
+
+<p><strong>Completed At:</strong> {{ task.completed_at }}</p>
+ <p><strong>Description:</strong> {{ task.description }}</p>
+        <p><strong>Instructions:</strong> {{ task.instructions }}</p>
+
+        {% if task.task_photo %}
+            <img src="{{ task.task_photo.url }}" alt="Task Photo" class="img-fluid" style="max-width: 200px; border:1px solid #ccc; padding:5px;">
+        {% else %}
+            <p><em>No photo submitted</em></p>
+        {% endif %}
+<!-- Show assign form only if task not assigned -->
+{% if not task.assigned_to %}
+    <h4>Assign Task</h4>
+    <form method="post" action="{% url 'assign_task' task.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Assign Task</button>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endif %}
+<hr>
+
+<!-- Photo + Description + Instructions side by side -->
+<div style="display:flex; align-items:flex-start; gap:20px;">
+    <!-- Photo -->
+
+
+
+<hr>
+
+<!-- Back button (always go to Admin Dashboard) -->
+<a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">⬅ Back to Dashboard</a>
+
+<!-- Delete button -->
+<form action="{% url 'task_delete' task.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<div class="container mt-4">
+
+    <h3>
+        {% if new_task %}
+            Task Details ({{ task.title }})
+        {% else %}
+            Update Task Status ({{ task.title }})
+        {% endif %}
+    </h3>
+    <p><strong>Status:</strong> {{ task.status|title }}</p>
+
+    <!-- Citizen-provided Before Photo -->
+    {% if task.before_photo %}
+        <p><strong>Before Work Photo:</strong></p>
+        <img src="{{ task.before_photo.url }}" style="max-width:300px; border-radius:8px; margin-top:10px;">
+    {% endif %}
+
+    <!-- NEW TASK → show start button -->
+    {% if new_task %}
+        <p><strong>Category:</strong> {{ task.category }}</p>
+        <p><strong>Location:</strong> {{ task.location }}</p>
+        <p><strong>Priority:</strong> {{ task.priority|title }}</p>
+       <p><strong>Description:</strong> {{ task.description|default:"-" }}</p>
+    <p><strong>Instructions:</strong> {{ task.instructions|default:"-" }}</p>
+      <p><strong>Estimated Time:</strong> {{ task.estimated_time|default:"-" }}</p>
+      <!-- Citizen-provided Before Photo -->
+        <!-- Citizen-provided Photo -->
+    {% if task.task_photo %}
+        <p><strong>Citizen Submitted Photo:</strong></p>
+        <img src="{{ task.task_photo.url }}" style="max-width:300px; border-radius:8px; margin-top:10px;">
+    {% else %}
+        <p><em>No photo submitted by citizen.</em></p>
+    {% endif %}
+
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="start_task" class="btn btn-success mt-3">Start Task</button>
+            <a href="{% url 'worker_dashboard' %}" class="btn btn-secondary mt-3">Back</a>
+        </form>
+    {% endif %}
+
+    <!-- IN PROGRESS → update form -->
+    {% if task.status == "in_progress" %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group mt-2">
+                <label>Status</label>
+                <select name="status" class="form-control" required>
+                    <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-2">
+                <label>Progress</label>
+                <input type="text" name="progress" value="{{ task.progress }}" class="form-control">
+            </div>
+
+            <div class="form-group mt-2">
+                <label>Work Description</label>
+                <textarea name="work_description" class="form-control">{{ task.work_description }}</textarea>
+            </div>
+
+            <div class="form-group mt-2">
+                <label>Materials Used</label>
+                <textarea name="materials_used" class="form-control">{{ task.materials_used }}</textarea>
+            </div>
+
+            <div class="form-group mt-2">
+                <label>Additional Notes</label>
+                <textarea name="additional_notes" class="form-control">{{ task.additional_notes }}</textarea>
+            </div>
+
+            <!-- After Photo only if Completed -->
+            <div class="form-group mt-2" id="after_photo_div" style="display:none;">
+                <label>After Work Photo</label>
+                <input type="file" name="after_photo" accept="image/*" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Save Update</button>
+            <a href="{% url 'worker_dashboard' %}" class="btn btn-secondary mt-2">Back</a>
+        </form>
+
+        <script>
+            const statusSelect = document.querySelector('select[name="status"]');
+            const afterDiv = document.getElementById('after_photo_div');
+
+            function toggleAfterPhoto() {
+                if (statusSelect.value === 'completed') {
+                    afterDiv.style.display = 'block';
+                } else {
+                    afterDiv.style.display = 'none';
+                }
+            }
+
+            statusSelect.addEventListener('change', toggleAfterPhoto);
+            window.addEventListener('load', toggleAfterPhoto);
+        </script>
+    {% endif %}
+
+    <!-- COMPLETED → view only -->
+    {% if task.status == "completed" %}
+        {% if task.after_photo %}
+            <p><strong>After Work Photo:</strong></p>
+            <img src="{{ task.after_photo.url }}" style="max-width:300px; border-radius:8px; margin-top:10px;">
+        {% endif %}
+        <p class="text-success mt-2"><strong>✅ This task is completed.</strong></p>
+        <a href="{% url 'worker_dashboard' %}" class="btn btn-secondary mt-2">Back</a>
+    {% endif %}
+
+</div>
+{% endblock %}

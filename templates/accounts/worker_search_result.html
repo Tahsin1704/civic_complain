@@ -1,0 +1,39 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>🔍 Search Result</h3>
+    <hr>
+
+    {% if query %}
+        <p>Search for Task ID: <strong>{{ query }}</strong></p>
+    {% endif %}
+
+    {% if task %}
+        <div class="card mt-3">
+            <div class="card-body">
+                <p><strong>Task ID:</strong> {{ task.id }}</p>
+                <p><strong>Task Code:</strong> {{ task.task_code }}</p>
+                <h5><strong>Title:</strong> {{ task.title }}</h5>
+                <p><strong>Category:</strong> {{ task.category }}</p>
+                <p><strong>Location:</strong> {{ task.location }}</p>
+                <p><strong>Status:</strong> {{ task.status|title }}</p>
+                <p><strong>Priority:</strong> {{ task.priority|title }}</p>
+
+                {% if task.task_photo %}
+                    <p><strong>Citizen Submitted Photo:</strong></p>
+                    <img src="{{ task.task_photo.url }}" alt="{{ task.title }}" style="max-width:200px; border-radius:8px;">
+                {% endif %}
+
+                <div class="mt-3">
+                    <a href="{% url 'view_task' task.id %}" class="btn btn-primary btn-sm">View Details</a>
+                    <a href="{% url 'worker_dashboard' %}" class="btn btn-secondary mt-3">⬅ Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-3">
+            ❌ No task found with that ID or it’s not assigned to you.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

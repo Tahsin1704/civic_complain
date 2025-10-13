@@ -1,24 +1,53 @@
-{% extends 'accounts/base.html' %}
+{% extends "accounts/base.html" %}
 {% block content %}
 <h2>Workers</h2>
-<p><a class="btn" href="{% url 'worker_create' %}">Add Worker</a></p>
-<table class="table">
-  <thead><tr><th>Email</th><th>Name</th><th>Actions</th></tr></thead>
-  <tbody>
-    {% for w in workers %}
-      <tr>
-        <td>{{ w.email }}</td>
-        <td>{{ w.first_name }} {{ w.last_name }}</td>
-        <td>
-          <form method="post" action="{% url 'worker_delete' w.id %}">
-            {% csrf_token %}
-            <button class="btn btn-danger">Delete</button>
-          </form>
-        </td>
-      </tr>
-    {% empty %}
-      <tr><td colspan="3">No workers yet.</td></tr>
-    {% endfor %}
-  </tbody>
+
+<!-- 🔍 Search Form -->
+<form method="get" action="{% url 'worker_search_admin' %}" class="d-flex mb-3" style="max-width: 400px;">
+    <input type="text" name="q" class="form-control me-2" placeholder="Search by email or name..." value="{{ query|default:'' }}">
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+</form>
+
+<a href="{% url 'worker_create' %}" class="btn btn-success mb-3">+ Add Worker</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Skills</th>
+            <th>Photo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for worker in workers %}
+        <tr>
+            <td>{{ worker.email }}</td>
+            <td>{{ worker.first_name }} {{ worker.last_name }}</td>
+            <td>{{ worker.worker_profile.phone }}</td>
+               <td>{{ worker.worker_profile.address }}</td>
+            <td>{{ worker.worker_profile.skills }}</td>
+            <td>
+                {% if worker.worker_profile.photo %}
+                    <img src="{{ worker.worker_profile.photo.url }}" alt="Photo" width="50">
+                {% else %}
+                    No photo
+                {% endif %}
+            </td>
+            <td>
+               <a href="{% url 'worker_update' worker.id %}" class="btn btn-warning btn-sm me-1">Update</a>
+
+                <a href="{% url 'worker_delete' worker.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6"><em>No workers found.</em></td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

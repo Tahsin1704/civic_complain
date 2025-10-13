@@ -1,0 +1,12 @@
+l>{% extends 'accounts/base.html' %}
+
+{% block content %}
+<h2>Confirm Delete</h2>
+<p>Are you sure you want to delete the complaint: <strong>{{ task.title }}</strong> submitted by <strong>{{ task.citizen_name }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+    <a href="{% url 'admin_task_list' %}">Cancel</a>
+</form>
+{% endblock %}

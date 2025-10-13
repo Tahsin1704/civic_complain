@@ -1,0 +1,20 @@
+{% extends "accounts/base.html" %}
+
+{% block content %}
+<h2>Assign Task</h2>
+
+<p><strong>Task:</strong> {{ task.title }}</p>
+<p><strong>Category:</strong> {{ task.category }}</p>
+<p><strong>Location:</strong> {{ task.location }}</p>
+<p><strong>Priority:</strong> {{ task.priority }}</p>
+<p><strong>Status:</strong> {{ task.status }}</p>
+
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Assign</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

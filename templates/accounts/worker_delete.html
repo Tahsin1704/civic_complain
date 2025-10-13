@@ -1,0 +1,20 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>Delete Worker: {{ user.first_name }} {{ user.last_name }}</h2>
+<p>Email: {{ user.email }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="reason">Reason for deletion:</label><br>
+    <textarea name="reason" id="reason" rows="4" cols="50" placeholder="Enter reason..." required></textarea><br><br>
+
+    <!-- Buttons -->
+    <button type="submit" style="background-color: red; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+        Delete Worker
+    </button>
+    <a href="{% url 'worker_list' %}"
+       style="background-color: gray; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; margin-left: 10px;">
+        Cancel
+    </a>
+</form>
+{% endblock %}

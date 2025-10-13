@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Tasks</h2>
+
+{% if filter_status %}
+<p>Filtered by status: <strong>{{ filter_status|capfirst }}</strong></p>
+{% endif %}
+
+{% if query %}
+<p>Search results for: "{{ query }}"</p>
+{% endif %}
+
+{% for task in tasks %}
+<div class="card mb-2">
+    <div class="card-body">
+        <h5>{{ task.title }}</h5>
+        <p>{{ task.category }}</p>
+        <p>Location: {{ task.location }}</p>
+        <p>Status: {{ task.status|capfirst }}</p>
+        {% if task.status == 'completed' %}
+            <p>Completed: {{ task.completed_at|date:"M d, Y" }}</p>
+        {% else %}
+            <p>Started: {{ task.created_at|date:"M d, Y" }}</p>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<p>No tasks found.</p>
+{% endfor %}
+
+<a href="{% url 'worker_dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+{% endblock %}

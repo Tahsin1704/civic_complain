@@ -1,0 +1,89 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">My Profile</h2>
+
+    <div class="row justify-content-center">
+        <!-- Profile Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                {% if profile.photo %}
+                    <img src="{{ profile.photo.url }}" class="rounded-circle mb-3" width="120" height="120">
+                {% else %}
+                    <img src="{% static 'img/default-profile.png' %}" class="rounded-circle mb-3" width="120" height="120">
+                {% endif %}
+
+                <p><strong>Name:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
+                <p><strong>Email:</strong> {{ request.user.email }}</p>
+                <p class="text-muted mb-1"><b>Phone:</b> {{ profile.phone }}</p>
+                <p class="text-muted mb-1"><b>Address:</b> {{ profile.address }}</p>
+                <p class="text-muted"><b>Skills:</b> {{ profile.skills }}</p>
+            </div>
+        </div>
+
+        <!-- Performance Overview + Small Pie Chart -->
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+             <h3 class="text-center mb-3" style="font-weight:bold;">Performance Overview</h3>
+
+
+                <!-- Summary Buttons -->
+                <div class="d-flex justify-content-between text-center mb-3">
+                    <div class="p-2 bg-warning rounded flex-fill mx-1">
+                        <strong>Pending</strong><br>{{ pending }}
+                    </div>
+                    <div class="p-2 bg-info rounded flex-fill mx-1 text-white">
+                        <strong>In Progress</strong><br>{{ in_progress }}
+                    </div>
+                    <div class="p-2 bg-success rounded flex-fill mx-1 text-white">
+                        <strong>Completed</strong><br>{{ completed }}
+                    </div>
+                </div>
+
+                <!-- Small Pie Chart -->
+                <canvas id="performanceChart" width="250" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx = document.getElementById('performanceChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Pending','In Progress','Completed'],
+        datasets: [{
+            data: [{{ pending }}, {{ in_progress }}, {{ completed }}],
+            backgroundColor: ['#ffc107','#17a2b8','#28a745'],
+            borderColor: '#fff',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: false,
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let total = {{ total_tasks }};
+                        let value = context.parsed;
+                        let percentage = total ? ((value / total) * 100).toFixed(1) : 0;
+                        return context.label + ': ' + value + ' (' + percentage + '%)';
+                    }
+                }
+            },
+            title: {
+                display: true,
+                text: 'Task Distribution'
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

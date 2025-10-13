@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Filtered Tasks: {{ current_filter|title }}</h3>
+    {% if tasks %}
+        {% for task in tasks %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6>{{ task.title }}</h6>
+                    <p>{{ task.category }}</p>
+                    <p>Location: {{ task.location }}</p>
+                    <p>Status: {{ task.status|title }}</p>
+                    {% if task.status == 'new' %}
+                        <a href="{% url 'update_task_status' task.id %}" class="btn btn-success btn-sm">Start</a>
+                    {% elif task.status == 'in_progress' %}
+                        <a href="{% url 'update_task_status' task.id %}" class="btn btn-warning btn-sm">Update Status</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No tasks found.</p>
+    {% endif %}
+</div>
+{% endblock %}

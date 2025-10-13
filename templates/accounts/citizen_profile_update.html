@@ -1,0 +1,37 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block content %}
+<h2>Update Profile</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>
+        <label>First name:</label><br>
+        {{ form.first_name }}
+    </p>
+    <p>
+        <label>Last name:</label><br>
+        {{ form.last_name }}
+    </p>
+    <p>
+        <label>Email:</label><br>
+        {{ form.email }}
+    </p>
+    <p>
+        <label>Address:</label><br>
+        {{ form.address }}
+    </p>
+    <p>
+        <label>Photo:</label><br>
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Profile Photo" width="150" style="display:block; margin-bottom:10px;">
+        {% else %}
+            No photo uploaded
+        {% endif %}
+        {{ form.photo }}
+    </p>
+
+    <button type="submit" class="btn btn-success"> Update</button>
+    <a href="{% url 'citizen_profile_view' %}" class="btn">Back</a>
+</form>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "accounts/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Update Task Status ({{ task.task_code }})</h3>
+
+    {% if task.status == "completed" %}
+        <div class="alert alert-success">
+            This task is already <strong>Completed</strong>. No further updates allowed.
+        </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Always show basic fields -->
+        <div class="mb-3">
+            <label for="id_status" class="form-label">Status</label>
+            {{ form.status }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_progress" class="form-label">Progress</label>
+            {{ form.progress }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_work_description" class="form-label">Work Description</label>
+            {{ form.work_description }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_materials_used" class="form-label">Materials Used</label>
+            {{ form.materials_used }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_additional_notes" class="form-label">Additional Notes</label>
+            {{ form.additional_notes }}
+        </div>
+
+        <!-- ✅ Only show photo fields if status == completed -->
+        <div id="photo-fields" style="display:none;">
+
+            <div class="mb-3">
+                <label for="id_after_photo" class="form-label">After Photo</label>
+                {{ form.after_photo }}
+            </div>
+        </div>
+
+        {% if task.status != "completed" %}
+            <button type="submit" class="btn btn-primary">Save Update</button>
+        {% endif %}
+        <a href="{% url 'worker_dashboard' %}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+
+<script>
+    // ✅ Show photo fields only if "Completed" selected
+    const statusSelect = document.getElementById("id_status");
+    const photoFields = document.getElementById("photo-fields");
+
+    function togglePhotos() {
+        if (statusSelect.value === "completed") {
+            photoFields.style.display = "block";
+        } else {
+            photoFields.style.display = "none";
+        }
+    }
+
+    if (statusSelect) {
+        statusSelect.addEventListener("change", togglePhotos);
+        togglePhotos();  // run on page load
+    }
+</script>
+{% endblock %}
