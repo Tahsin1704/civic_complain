@@ -41,7 +41,7 @@ try:
 
     time.sleep(2)
     view_button = wait.until(EC.element_to_be_clickable(
-    (By.XPATH, "//a[@href='/tasks/106/detail/' and contains(text(), 'View')]")
+    (By.XPATH, "//a[@href='/tasks/109/detail/' and contains(text(), 'View')]")
     ))
 
     # Scroll to it and click

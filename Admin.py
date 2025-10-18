@@ -25,7 +25,7 @@ try:
     time.sleep(2)
     driver.find_element(By.XPATH, "//button[@class='btn btn-primary w-100 mt-2']").click()
     time.sleep(2)
-    driver.find_element(By.NAME, "q").send_keys("TASK-0021")
+    driver.find_element(By.NAME, "q").send_keys("TASK-0025")
     time.sleep(2)
     driver.find_element(By.XPATH, "//button[@class='btn btn-primary']").click()
     time.sleep(2)
@@ -41,7 +41,7 @@ try:
     ))).click()
     time.sleep(2)
     tahsin_row = wait.until(EC.presence_of_element_located((
-    By.XPATH, "//tr[td[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'sajid@gmail.com')]]"
+    By.XPATH, "//tr[td[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ali@gmail.com')]]"
     )))
 
     update_button = tahsin_row.find_element(By.XPATH, ".//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'update')]")
@@ -76,19 +76,19 @@ try:
     # ====== Fill Worker Details ======
 
     # Email
-    wait.until(EC.presence_of_element_located((By.ID, "id_email"))).send_keys("ali@gmail.com")
+    wait.until(EC.presence_of_element_located((By.ID, "id_email"))).send_keys("Muhib@gmail.com")
     time.sleep(2)
     # Password
-    driver.find_element(By.ID, "id_password").send_keys("alibaba12345")
+    driver.find_element(By.ID, "id_password").send_keys("muhib12345")
     time.sleep(2)
     # First Name
-    driver.find_element(By.ID, "id_first_name").send_keys("Ali")
+    driver.find_element(By.ID, "id_first_name").send_keys("Muhib")
     time.sleep(2)
     # Last Name
     driver.find_element(By.ID, "id_last_name").send_keys("Baba")
     time.sleep(2)
     # Phone
-    driver.find_element(By.ID, "id_phone").send_keys("01742347882")
+    driver.find_element(By.ID, "id_phone").send_keys("01742354882")
     time.sleep(2)
     # Address
     driver.find_element(By.ID, "id_address").send_keys("Farmgate")

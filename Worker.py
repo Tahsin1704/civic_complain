@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 import time
 BASE_URL = "http://127.0.0.1:8000"
 
@@ -25,9 +26,9 @@ try:
     time.sleep(2)
 
     view_button = wait.until(EC.element_to_be_clickable(
-    (By.XPATH, "//a[@href='/worker/task/104/' and contains(text(), 'View')]")
+    (By.XPATH, "//a[@href='/worker/task/110/' and contains(text(), 'View')]")
     ))
-
+    time.sleep(2)
     # Scroll to it and click
     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", view_button)
     time.sleep(2)
@@ -71,13 +72,29 @@ try:
     address_box.send_keys("Lagbe na")
     time.sleep(2)
 
+    status_dropdown = Select(driver.find_element("id", "id_status"))
+
+# Option 1: Select by visible text
+    status_dropdown.select_by_visible_text("Completed")
+
+
     save_button = wait.until(EC.element_to_be_clickable((
     By.XPATH, "//button[contains(text(), 'Save') or contains(text(), 'Update')]"
     )))
     time.sleep(2)
     save_button.click()
-    time.sleep(2)
 
+    time.sleep(2)
+    driver.find_element(By.NAME, "query").send_keys("TASK-0020")
+    time.sleep(2)
+    driver.find_element(By.XPATH, "//button[@class='btn btn-outline-primary']").click()
+    time.sleep(2)
+    view_button = driver.find_element(By.LINK_TEXT, "View Details")
+
+# Click the button
+    view_button.click()
+
+    time.sleep(2)
 
     wait.until(EC.element_to_be_clickable((
     By.XPATH, "//a[contains(normalize-space(.), 'Profile')]"
