@@ -13,8 +13,8 @@
       margin: 0;
     }
     .logout-box button {
-      background-color: red; /* লাল ব্যাকগ্রাউন্ড */
-      color: white;          /* হোয়াইট টেক্সট */
+      background-color: red;
+      color: white;
       border: none;
       padding: 5px 12px;
       border-radius: 4px;
@@ -22,7 +22,7 @@
       font-weight: bold;
     }
 
-    /* Optional: navbar spacing */
+
     .topbar nav {
       display: flex;
       align-items: center;
@@ -33,7 +33,7 @@
 <body>
   <header class="topbar">
     <div class="container">
-      <!-- Civic Complaint নাম সব pages-এ -->
+
  <h1>
   <a href="{% url 'home' %}">
     <i class="bi bi-building me-2"></i> Civic Complaint
@@ -85,7 +85,7 @@
 
        {% else %}
 
-  <a href="{% url 'home' %}"><i class="bi bi-house-door-fill"></i> Home</a>
+  <a href="{% url 'landing' %}"><i class="bi bi-house-door-fill"></i> Home</a>
   <a href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
   <a href="{% url 'signup_citizen' %}"><i class="bi bi-person-plus-fill"></i> Sign up</a>
 {% endif %}
@@ -100,6 +100,36 @@
     {% endfor %}
     {% block content %}{% endblock %}
   </main>
+
+
+</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div style="text-align: center; margin-top: 40px;">
+  <div id="clock" style="font-size: 18px; font-weight: bold; color: #555;"></div>
+</div>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    };
+    const formattedTime = now.toLocaleString('en-US', options);
+    document.getElementById('clock').innerHTML = " Current Time: " + formattedTime;
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>
+
+
+
 
   <footer class="footer">
     <div class="container">
