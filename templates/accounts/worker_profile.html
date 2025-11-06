@@ -6,7 +6,7 @@
     <h2 class="text-center mb-4">My Profile</h2>
 
     <div class="row justify-content-center">
-        <!-- Profile Card -->
+
         <div class="col-md-4">
             <div class="card shadow-sm p-3 text-center">
                 {% if profile.photo %}
@@ -23,13 +23,12 @@
             </div>
         </div>
 
-        <!-- Performance Overview + Small Pie Chart -->
         <div class="col-md-4">
             <div class="card shadow-sm p-3">
              <h3 class="text-center mb-3" style="font-weight:bold;">Performance Overview</h3>
 
 
-                <!-- Summary Buttons -->
+
                 <div class="d-flex justify-content-between text-center mb-3">
                     <div class="p-2 bg-warning rounded flex-fill mx-1">
                         <strong>Pending</strong><br>{{ pending }}
@@ -42,7 +41,7 @@
                     </div>
                 </div>
 
-                <!-- Small Pie Chart -->
+
                 <canvas id="performanceChart" width="250" height="250"></canvas>
             </div>
         </div>

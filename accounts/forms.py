@@ -69,7 +69,7 @@ class WorkerCreateForm(forms.ModelForm):
                 photo=self.cleaned_data.get("photo"),
             )
         return user
-# 🔴 Admin Creation Form (used by Superuser only)
+#  Admin Creation Form (used by Superuser only)
 class AdminCreateForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput)
 
@@ -106,8 +106,8 @@ class TaskSubmitForm(forms.ModelForm):
             'instructions': forms.Textarea(attrs={'rows': 2}),
         }
 
-# 🟡 Task Assignment Form (for Admin)
-# 🟡 Task Assignment Form (for Admin)
+# Task Assignment Form (for Admin)
+# Task Assignment Form (for Admin)
 class TaskAssignForm(forms.ModelForm):
     assigned_to = forms.ModelChoiceField(
         queryset=User.objects.filter(role=Roles.WORKER),

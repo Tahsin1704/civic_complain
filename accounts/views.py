@@ -19,9 +19,9 @@ from django.contrib.auth.views import LoginView
 def home(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
-    return redirect('login')  # ← send unauthenticated users to login page
+    return redirect('login')
 
-# 🟢 Citizen signup view — public registration
+
 def signup_citizen(request):
     if request.method == 'POST':
         form = CitizenSignupForm(request.POST,request.FILES)
@@ -33,9 +33,7 @@ def signup_citizen(request):
         form = CitizenSignupForm()
     return render(request, 'accounts/signup_citizen.html', {'form': form})
 
-# 🧭 Dashboard — shown after login, varies by role
-# 🧭 Dashboard — shown after login, varies by role
-# views.py
+
 
 @login_required
 
@@ -43,10 +41,10 @@ def signup_citizen(request):
 @login_required
 def dashboard(request):
     if request.user.role == Roles.CITIZEN:
-        # Get all tasks submitted by this citizen
+
         tasks = Task.objects.filter(submitted_by=request.user).order_by('-id')
 
-        # Counters
+
         new_count = tasks.filter(status='new').count()
         in_progress_count = tasks.filter(status='in_progress').count()
         completed_count = tasks.filter(status='completed').count()
@@ -147,17 +145,17 @@ def worker_delete(request, user_id):
             reason=reason
         )
 
-        # Delete the worker
+
         worker.delete()
         messages.success(request, f"Worker '{worker.email}' deleted successfully.")
         return redirect('worker_list')
 
-    # GET → show form with reason field
+
     return render(request, 'accounts/worker_delete.html', {'user': worker})
 
 
 
-# 👥 Citizen list — Admin-only
+#  Citizen list — Admin-only
 @login_required
 def citizen_deactivate(request, user_id):
     if request.user.role != Roles.ADMIN:
@@ -191,7 +189,7 @@ def citizen_deactivate(request, user_id):
 
         return redirect('citizen_list')
 
-    # Pass citizen to template
+
     return render(request, 'accounts/citizen_deactive.html', {'user': citizen})
 
 @login_required
@@ -201,11 +199,11 @@ def citizen_list(request):
     citizens = User.objects.filter(role=Roles.CITIZEN)
     return render(request, 'accounts/citizen_list.html', {'citizens': citizens})
 
-# 🚫 Deactivate citizen — Admin-only
 
 
 
-# 🗑 Delete citizen — Admin-only
+
+
 @login_required
 def citizen_delete(request, user_id):
     if request.user.role != Roles.ADMIN:
@@ -219,7 +217,7 @@ def citizen_delete(request, user_id):
         return redirect('citizen_list')
     return render(request, 'accounts/confirm_delete.html', {'user': citizen})
 
-# 🔐 Create admin — Superuser-only
+
 @user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
 def admin_create(request):
     if request.method == 'POST':
@@ -285,7 +283,7 @@ def task_delete(request, task_id):
 
     task = get_object_or_404(Task, id=task_id)
 
-    # Admin can delete any task from preview
+
     if request.method == 'POST':
         task.delete()
         messages.success(request, "Task deleted.")
@@ -309,12 +307,12 @@ def update_task_status(request, task_id):
         if form.is_valid():
             status = form.cleaned_data['status']
 
-            # যদি already completed থাকে → আর update হবে না
+
             if task.status == 'completed':
                 messages.warning(request, "This task is already completed. You cannot update it further.")
                 return redirect('worker_dashboard')
 
-            # In Progress এ update করলে → প্রতিবার latest save হবে
+
             if status == 'in_progress':
                 task.status = 'in_progress'
                 task.progress = form.cleaned_data.get('progress')
@@ -348,7 +346,7 @@ def update_task_status(request, task_id):
             return redirect('worker_dashboard')
 
     else:
-        # এখানে আগের saved ডেটা দেখানোর জন্য initial সেট করা
+
         form = TaskUpdateForm(initial={
             'status': task.status,
             'progress': task.progress,
@@ -486,7 +484,7 @@ def submit_task(request):
         form = TaskSubmitForm(request.POST, request.FILES)
         if form.is_valid():
             task = form.save(commit=False)
-            task.submitted_by = request.user  # ✅ very important
+            task.submitted_by = request.user  #  very important
             task.status = "new"
             task.save()
 
@@ -494,7 +492,7 @@ def submit_task(request):
             request.session['submitted_task_id'] = task.id
 
             messages.success(request, "Your complaint has been submitted successfully.")
-            return redirect("citizen_dashboard")  # ✅ redirect to citizen dashboard
+            return redirect("citizen_dashboard")  #  redirect to citizen dashboard
     else:
         form = TaskSubmitForm()
 
@@ -541,7 +539,7 @@ def admin_dashboard(request):
     if request.user.role != Roles.ADMIN:
         return redirect('dashboard')
 
-    tasks = Task.objects.all()  # clean DB, so simple query works
+    tasks = Task.objects.all()
 
 
     total_complaints = tasks.count()
@@ -572,13 +570,12 @@ def admin_dashboard(request):
 def view_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
 
-    # শুধুমাত্র assigned worker দেখতে পারবে
+
     if request.user.role == "WORKER" and task.assigned_to != request.user:
         return redirect("worker_dashboard")
 
-    # ------------------------
-    # NEW TASK → view only + start button
-    # ------------------------
+
+
     if task.status == "new":
         if request.method == "POST" and "start_task" in request.POST:
             task.status = "in_progress"
@@ -589,9 +586,7 @@ def view_task(request, task_id):
         context = {"task": task, "new_task": True}  # template-এ check করার জন্য
         return render(request, "accounts/view_task.html", context)
 
-    # ------------------------
-    # IN PROGRESS → update task
-    # ------------------------
+
     if task.status == "in_progress":
         if request.method == "POST":
             form = TaskUpdateForm(request.POST, request.FILES)
@@ -624,9 +619,7 @@ def view_task(request, task_id):
         context = {"task": task, "form": form}
         return render(request, "accounts/view_task.html", context)
 
-    # ------------------------
-    # COMPLETED → only view photos
-    # ------------------------
+
     context = {"task": task}
     return render(request, "accounts/view_task.html", context)
 
@@ -638,7 +631,7 @@ def view_task(request, task_id):
 
 def start_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
-    # status update করে In Progress এ পাঠাচ্ছি
+
     task.status = "in_progress"
     task.save()
     return redirect("dashboard")
@@ -651,7 +644,6 @@ def worker_search_task(request):
     query = request.GET.get('query', '').strip()
     task = None
 
-    # এখন task_code দিয়ে খুঁজবে
     if query:
         try:
             task = Task.objects.get(task_code__iexact=query, assigned_to=request.user)
@@ -674,7 +666,7 @@ def search_task_by_code(request):
         messages.warning(request, "Please enter a Task Code to search.")
         return redirect('admin_dashboard')
 
-    # ✅ Task খুঁজে পাওয়া গেলে task_preview পেজে redirect করবে
+
     try:
         task = Task.objects.get(task_code__iexact=query)
         return redirect('task_preview', task_id=task.id)
@@ -696,7 +688,7 @@ def search_task_preview(request):
 
     try:
         task = Task.objects.get(task_code__iexact=query)
-        # এই page এ শুধুমাত্র preview দেখাবে
+
         return render(request, 'accounts/search_task_preview.html', {'task': task})
     except Task.DoesNotExist:
         messages.error(request, "No task found with that Task Code.")
@@ -709,7 +701,7 @@ def worker_preview(request, user_id=None):
     if request.user.role != Roles.ADMIN:
         return redirect('dashboard')
 
-    # user_id থাকলে সেই worker দেখাবে
+
     worker = get_object_or_404(User, id=user_id, role=Roles.WORKER)
     # Delete action
     if request.method == "POST":
@@ -736,7 +728,7 @@ def worker_search_admin(request):
         except User.DoesNotExist:
             messages.error(request, "No worker found with this email.")
 
-    # query না থাকলে বা worker না পাওয়া গেলে full list দেখাবে
+
     workers = User.objects.filter(role=Roles.WORKER)
     context = {
         'workers': workers,
@@ -771,7 +763,7 @@ def citizen_search_admin(request):
         except User.DoesNotExist:
             messages.error(request, "No citizen found with this email.")
 
-    # query না থাকলে বা না পাওয়া গেলে full list দেখাবে
+
     citizens = User.objects.filter(role=Roles.CITIZEN)
     return render(request, 'accounts/citizen_list.html', {'citizens': citizens, 'query': query})
 

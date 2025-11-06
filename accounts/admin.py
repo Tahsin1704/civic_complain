@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User, AdminActionLog,Task
 
-# 🔐 Custom admin panel for User model
+#  Custom admin panel for User model
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
@@ -26,7 +26,7 @@ class UserAdmin(BaseUserAdmin):
 
     filter_horizontal = ('groups', 'user_permissions',)
 
-# 📋 Admin action log viewer
+#  Admin action log viewer
 @admin.register(AdminActionLog)
 class AdminActionLogAdmin(admin.ModelAdmin):
     list_display = ('timestamp', 'admin', 'action', 'target_user', 'reason')

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Welcome back, {{ request.user.first_name }}!</h2>
-<!-- 🔍 Search Bar -->
+<!--  Search Bar -->
 <form method="get" action="{% url 'worker_search_task' %}" class="d-flex mb-4" style="max-width: 400px;">
   <input type="text" name="query" class="form-control me-2" placeholder="Enter Task ID..." required>
   <button class="btn btn-outline-primary" type="submit">Search</button>
@@ -25,7 +25,7 @@
       </button>
     </div>
 
-    <!-- ✅ New Tasks Section -->
+    <!--  New Tasks Section -->
     <div id="section-new" class="task-section">
         <h4>New Assignments</h4>
         {% for task in new_tasks %}
@@ -54,7 +54,7 @@
         {% endfor %}
     </div>
 
-<!-- ✅ In Progress Section -->
+<!--  In Progress Section -->
 <div id="section-progress" class="task-section" style="display:none;">
     <h4>In Progress</h4>
     {% for task in in_progress_tasks %}
@@ -66,10 +66,10 @@
                 <p><strong>Location:</strong> {{ task.location }}</p>
                 <p><strong>Priority:</strong> {{ task.priority|title }}</p>
 
-                <!-- Estimated Time -->
+
                 <p><strong>Estimated Time:</strong> {{ task.estimated_time|default:"-" }}</p>
 
-                <!-- ✅ Citizen Submitted Photo -->
+
                 {% if task.task_photo %}
                     <p><strong>Citizen Submitted:</strong></p>
                     <img src="{{ task.task_photo.url }}" alt="Citizen submitted {{ task.title }}"
@@ -78,7 +78,7 @@
                     <p><em>No citizen photo submitted.</em></p>
                 {% endif %}
 
-                <!-- ✅ Show latest progress -->
+
                 {% if task.progress %}
                     <p><strong>Latest Progress:</strong> {{ task.progress }}</p>
                 {% else %}
@@ -98,7 +98,7 @@
 </div>
 
 
-<!-- ✅ Completed Section -->
+
 <div id="section-completed" class="task-section" style="display:none;">
     <h4>Completed</h4>
     {% for task in completed_tasks %}
@@ -114,7 +114,7 @@
     <p><strong>Materials Used:</strong> {{ task.materials_used }}</p>
     <p><strong>Additional Notes:</strong> {{ task.additional_notes }}</p>
 
-                <!-- Citizen's Submitted Photo -->
+
                 {% if task.task_photo %}
                     <p><strong>Citizen Submitted:</strong></p>
                     <img src="{{ task.task_photo.url }}" alt="Submitted {{ task.title }}"
@@ -124,7 +124,6 @@
                 {% endif %}
 
 
-                <!-- Worker's After Photo -->
                 {% if task.after_photo %}
                     <p><strong>After Work:</strong></p>
                     <img src="{{ task.after_photo.url }}" alt="After {{ task.title }}"
@@ -184,14 +183,14 @@
 
 <script>
 function showSection(section) {
-    // সব section hide করবো
+
     document.querySelectorAll('.task-section').forEach(div => {
         div.style.display = "none";
     });
-    // যেটা ক্লিক করা হয়েছে সেটা দেখাবো
+
     document.getElementById("section-" + section).style.display = "block";
 
-    // active button টগল করবো
+
     document.querySelectorAll('.summary-box').forEach(btn => {
         btn.classList.remove("active");
     });
