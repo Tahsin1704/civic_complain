@@ -9,7 +9,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <!-- Left: Photo -->
+
                 <div class="col-md-4 text-center">
                     {% if worker.worker_profile.photo %}
                         <img src="{{ worker.worker_profile.photo.url }}" class="rounded-circle shadow" style="width:180px; height:180px; object-fit:cover;">
@@ -18,7 +18,7 @@
                     {% endif %}
                 </div>
 
-                <!-- Right: Details -->
+
                 <div class="col-md-8">
                     <p><strong>Name:</strong> {{ worker.first_name }} {{ worker.last_name }}</p>
                     <p><strong>Email:</strong> {{ worker.email }}</p>

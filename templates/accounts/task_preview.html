@@ -32,7 +32,7 @@
         {% else %}
             <p><em>No photo submitted</em></p>
         {% endif %}
-<!-- Show assign form only if task not assigned -->
+
 {% if not task.assigned_to %}
     <h4>Assign Task</h4>
     <form method="post" action="{% url 'assign_task' task.id %}">
@@ -44,18 +44,18 @@
 {% endif %}
 <hr>
 
-<!-- Photo + Description + Instructions side by side -->
+
 <div style="display:flex; align-items:flex-start; gap:20px;">
-    <!-- Photo -->
+
 
 
 
 <hr>
 
-<!-- Back button (always go to Admin Dashboard) -->
+
 <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">⬅ Back to Dashboard</a>
 
-<!-- Delete button -->
+
 <form action="{% url 'task_delete' task.id %}" method="post" style="display:inline;">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Delete</button>

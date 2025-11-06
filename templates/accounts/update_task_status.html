@@ -12,7 +12,7 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <!-- Always show basic fields -->
+
         <div class="mb-3">
             <label for="id_status" class="form-label">Status</label>
             {{ form.status }}
@@ -38,7 +38,7 @@
             {{ form.additional_notes }}
         </div>
 
-        <!-- ✅ Only show photo fields if status == completed -->
+
         <div id="photo-fields" style="display:none;">
 
             <div class="mb-3">
@@ -55,7 +55,7 @@
 </div>
 
 <script>
-    // ✅ Show photo fields only if "Completed" selected
+    // Show photo fields only if "Completed" selected
     const statusSelect = document.getElementById("id_status");
     const photoFields = document.getElementById("photo-fields");
 

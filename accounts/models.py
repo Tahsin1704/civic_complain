@@ -115,7 +115,7 @@ class Task(models.Model):
 
 
 
-        if not self.task_code:  # শুধু প্রথমবার assign হবে
+        if not self.task_code:
             last_task = Task.objects.order_by("-id").first()
             if last_task and last_task.task_code:
                 try:

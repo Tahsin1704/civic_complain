@@ -75,7 +75,7 @@
                 <textarea name="additional_notes" class="form-control">{{ task.additional_notes }}</textarea>
             </div>
 
-            <!-- After Photo only if Completed -->
+
             <div class="form-group mt-2" id="after_photo_div" style="display:none;">
                 <label>After Work Photo</label>
                 <input type="file" name="after_photo" accept="image/*" class="form-control">
@@ -108,7 +108,7 @@
             <p><strong>After Work Photo:</strong></p>
             <img src="{{ task.after_photo.url }}" style="max-width:300px; border-radius:8px; margin-top:10px;">
         {% endif %}
-        <p class="text-success mt-2"><strong>✅ This task is completed.</strong></p>
+        <p class="text-success mt-2"><strong> This task is completed.</strong></p>
         <a href="{% url 'worker_dashboard' %}" class="btn btn-secondary mt-2">Back</a>
     {% endif %}
 

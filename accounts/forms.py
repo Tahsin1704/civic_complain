@@ -11,7 +11,7 @@ class CitizenSignupForm(forms.ModelForm):
 
     class Meta:
         model = User
-        # <-- এখানে fields অবশ্যই দিতে হবে
+
         fields = ['email', 'first_name', 'last_name', 'address', 'photo']
 
     def clean(self):
@@ -42,7 +42,7 @@ class CitizenProfileUpdateForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email', 'address', 'photo']
 
 class WorkerCreateForm(forms.ModelForm):
-    # WorkerProfile এর extra fields
+
     phone = forms.CharField(required=True)
     address = forms.CharField(widget=forms.Textarea, required=True)
     skills = forms.CharField(widget=forms.Textarea, required=True)
@@ -50,17 +50,17 @@ class WorkerCreateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["email", "password", "first_name", "last_name"]  # User table এর ফিল্ড
+        fields = ["email", "password", "first_name", "last_name"]
 
     def save(self, commit=True):
-        # প্রথমে User create করা হবে
+
         user = super().save(commit=False)
         user.role = "WORKER"  # default role worker
-        user.set_password(self.cleaned_data["password"])  # password hash করা
+        user.set_password(self.cleaned_data["password"])
         if commit:
             user.save()
 
-            # WorkerProfile create করা হবে
+
             WorkerProfile.objects.create(
                 user=user,
                 phone=self.cleaned_data.get("phone"),
@@ -88,7 +88,7 @@ class AdminCreateForm(forms.ModelForm):
             user.save()
         return user
 
-# 🟢 Task Submission Form (for Citizens)
+
 class TaskSubmitForm(forms.ModelForm):
     class Meta:
         model = Task
@@ -106,13 +106,12 @@ class TaskSubmitForm(forms.ModelForm):
             'instructions': forms.Textarea(attrs={'rows': 2}),
         }
 
-# Task Assignment Form (for Admin)
-# Task Assignment Form (for Admin)
+
 class TaskAssignForm(forms.ModelForm):
     assigned_to = forms.ModelChoiceField(
         queryset=User.objects.filter(role=Roles.WORKER),
         label="Assign to Worker",
-        required=False  # allow empty to show "Not assigned" if needed
+        required=False
     )
     priority = forms.ChoiceField(
         choices=Task.PRIORITY_CHOICES,
@@ -125,7 +124,7 @@ class TaskAssignForm(forms.ModelForm):
         fields = [
             'assigned_to',
             'priority',
-            'status',  # Usually 'new' when assigning
+            'status',
         ]
 
 
